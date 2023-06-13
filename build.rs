@@ -13,7 +13,7 @@ fn main() {
     dst.push("lib");
 
     println!("cargo:rustc-link-search=native={}", dst.display());
-    println!("cargo:rustc-link-lib=dylib=rasta");
+    println!("cargo:rustc-link-lib=dylib=rasta_tcp"); // choose which protocol to use
 
     let mut bindings = bindgen::Builder::default().clang_arg("-Irasta-protocol/src/include/");
     for header in
@@ -24,6 +24,7 @@ fn main() {
             bindings = bindings.header(header.path().to_string_lossy());
         }
     }
+    bindings = bindings.header("rasta-protocol/examples/common/headers/configfile.h");
 
     let out_path = PathBuf::from(env::var("OUT_DIR").unwrap());
     bindings
